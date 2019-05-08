@@ -1,17 +1,15 @@
 {
-  "name": "vk-hackathon-2018-demo-app",
+  "name": "vk-quest-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "The simple application which is based on VKontakte Apps.",
   "main": "index.js",
-  "homepage": "https://kuhel.github.io/VK-Hackathon-2018-demo-app",
+  "homepage": "https://github.com/amidf/vk-quest-app",
   "scripts": {
-    "start": "cross-env PORT=10888 react-scripts start",
-    "build": "react-scripts build",
-    "deploy": "gh-pages -d build",
-    "predeploy": "npm run build"
+    "start": "cross-env PORT=8080 react-scripts start",
+    "build": "react-scripts build"
   },
   "keywords": [],
-  "author": "Gleb Vorontsov <vorontsov.gleb@gmail.com>",
+  "author": "Dima Fedin <dima.groot.04@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "cross-env": "^5.2.0",
@@ -23,8 +21,6 @@
     "@vkontakte/vkui": "^2.13.0",
     "@vkontakte/vkui-connect": "^1.1.2",
     "core-js": "^2.5.7",
-    "gh-pages": "^2.0.1",
-    "google-maps-react": "^2.0.2",
     "prop-types": "^15.6.2",
     "react": "^16.6.1",
     "react-dom": "^16.6.1"
