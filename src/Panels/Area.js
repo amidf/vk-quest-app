@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Panel,
@@ -17,11 +17,23 @@ import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 import { OS_NAME } from '../Constants';
 import { getData } from '../Modules';
 
-const Area = ({ id, cardCode, go, setPopout }) => {
+const Area = ({
+  id,
+  activeArea,
+  go,
+  setLocation,
+  setPopout,
+  setActiveTask
+}) => {
   // TODO: add set state functions
-  const [data] = useState(getData());
-  const [code] = useState(cardCode);
+  const [tasks, setTasks] = useState({});
   // const [progress, setProgress] = useState(null);
+
+  useEffect(() => {
+    const updatedTasks = getData();
+
+    setTasks(updatedTasks);
+  }, []);
 
   // TODO: implement
   // const addProgress = () => {
@@ -44,59 +56,66 @@ const Area = ({ id, cardCode, go, setPopout }) => {
     );
   };
 
+  const handleClick = taskId => {
+    setActiveTask(taskId);
+    setLocation('task');
+  };
+
   return (
-    data && (
-      <Panel id={id}>
-        <PanelHeader
-          left={
-            <HeaderButton onClick={go} data-to="home">
-              {OS_NAME() === IOS ? <Icon24Cancel /> : <Icon24Cancel />}
-            </HeaderButton>
-          }>
-          Ориентирование
-        </PanelHeader>
+    <Panel id={id}>
+      <PanelHeader
+        left={
+          <HeaderButton onClick={go} data-to="home">
+            {OS_NAME() === IOS ? <Icon24Cancel /> : <Icon24Cancel />}
+          </HeaderButton>
+        }>
+        Ориентирование
+      </PanelHeader>
 
+      <Group>
+        <Div>
+          <InfoRow title="Количество Контрольных Пунктов">
+            {tasks[activeArea] ? tasks[activeArea].length : 0}
+          </InfoRow>
+        </Div>
+      </Group>
+
+      <Group title="Доступные Контрольные точки">
+        <Div>
+          После прохождения всех контрольных точек вы станете победителем.
+          Удачи!
+        </Div>
+        {tasks[activeArea] &&
+          tasks[activeArea].map(task => {
+            return (
+              <Group key={task.name}>
+                <List>
+                  <Cell expandable onClick={() => handleClick(task.id)}>
+                    {task.name}
+                  </Cell>
+                </List>
+              </Group>
+            );
+          })}
         <Group>
-          <Div>
-            <InfoRow title="Количество Контрольных Пунктов">
-              {data[code] ? data[code].length : 0}
-            </InfoRow>
-          </Div>
+          <List>
+            <Cell expandable onClick={openSheetRightAnswer}>
+              Точка
+            </Cell>
+          </List>
         </Group>
-
-        <Group title="Доступные Контрольные точки">
-          <Div>
-            После прохождения всех контрольных точек вы станете победителем.
-            Удачи!
-          </Div>
-          {data[code] &&
-            data[code].map(i => {
-              return (
-                <Group key={i.name}>
-                  <List>
-                    <Cell expandable onClick={e => go(e, i)} data-to="task">
-                      {i.name}
-                    </Cell>
-                  </List>
-                </Group>
-              );
-            })}
-          <Group>
-            <List>
-              <Cell expandable onClick={openSheetRightAnswer}>
-                Точка
-              </Cell>
-            </List>
-          </Group>
-        </Group>
-      </Panel>
-    )
+      </Group>
+    </Panel>
   );
 };
 
 Area.propTypes = {
   id: PropTypes.string.isRequired,
-  go: PropTypes.func.isRequired
+  activeArea: PropTypes.string.isRequired,
+  go: PropTypes.func.isRequired,
+  setLocation: PropTypes.func.isRequired,
+  setPopout: PropTypes.func.isRequired,
+  setActiveTask: PropTypes.func.isRequired
 };
 
 export default Area;

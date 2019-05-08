@@ -15,6 +15,7 @@ const App = () => {
     ~ROUTES.indexOf(location) ? location : 'home'
   );
   const [activeArea, setActiveArea] = useState(null);
+  const [activeTask, setActiveTask] = useState(null);
   const [popout, setPopout] = useState(null);
   const [cardId, setCardId] = useState(0);
   const [data, setData] = useState({});
@@ -60,10 +61,10 @@ const App = () => {
       <Area
         id="area"
         activeArea={activeArea}
-        cardCode={cardId}
-        data={data}
         go={go}
+        setLocation={setLocation}
         setPopout={setPopout}
+        setActiveTask={setActiveTask}
       />
       <Task
         id="task"
