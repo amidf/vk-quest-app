@@ -24,17 +24,19 @@ class App extends PureComponent {
     }
   };
 
-  go = (e = 'home', id = 0, data = {}) => {
-    let route = null;
+  go = (e, id = 0, data = {}) => {
+    let updatedActivePanel = null;
 
-    if (typeof route === 'string') {
-      route = e;
+    if (typeof updatedActivePanel === 'string') {
+      updatedActivePanel = e;
     } else if (e && e.currentTarget) {
-      route = e.currentTarget.dataset.to;
+      updatedActivePanel = e.currentTarget.dataset.to;
     }
 
-    this.setState({ activePanel: route, cardId: id, data: data }, () => {
-      this.setLocation(route);
+    this.setState({ activePanel: updatedActivePanel, cardId: id, data }, () => {
+      if (updatedActivePanel) {
+        this.setLocation(updatedActivePanel);
+      }
     });
   };
 
