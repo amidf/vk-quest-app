@@ -17,8 +17,6 @@ const App = () => {
   const [activeArea, setActiveArea] = useState(null);
   const [activeTask, setActiveTask] = useState(null);
   const [popout, setPopout] = useState(null);
-  const [cardId, setCardId] = useState(0);
-  const [data, setData] = useState({});
   // TODO: add set state function
   const [fetchedUser] = useState({});
 
@@ -32,24 +30,6 @@ const App = () => {
     setActivePanel(route);
   };
 
-  const go = (e, id = 0, data = {}) => {
-    let updatedActivePanel = null;
-
-    if (typeof e === 'string') {
-      updatedActivePanel = e;
-    } else if (e && e.currentTarget) {
-      updatedActivePanel = e.currentTarget.dataset.to;
-    }
-
-    setActivePanel(updatedActivePanel);
-    setCardId(id);
-    setData(data);
-
-    if (updatedActivePanel) {
-      setLocation(updatedActivePanel);
-    }
-  };
-
   return (
     <View activePanel={activePanel} popout={popout}>
       <Home
@@ -61,17 +41,17 @@ const App = () => {
       <Area
         id="area"
         activeArea={activeArea}
-        go={go}
         setLocation={setLocation}
         setPopout={setPopout}
         setActiveTask={setActiveTask}
       />
       <Task
         id="task"
-        cardId={cardId}
-        data={data}
-        go={go}
+        activeArea={activeArea}
+        activeTask={activeTask}
+        setLocation={setLocation}
         setPopout={setPopout}
+        setActiveTask={setActiveTask}
       />
     </View>
   );
