@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import connect from '@vkontakte/vkui-connect';
 import { View } from '@vkontakte/vkui';
 
@@ -10,17 +10,11 @@ import Task from './Panels/Task';
 
 const location = window.location.hash.substr(1);
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      activePanel: ~ROUTES.indexOf(location) ? location : 'home',
-      popout: null
-    };
-
-    this.setPopout = this.setPopout.bind(this);
-  }
+class App extends PureComponent {
+  state = {
+    activePanel: ~ROUTES.indexOf(location) ? location : 'home',
+    popout: null
+  };
 
   setLocation = route => {
     if (route !== 'home') {
@@ -30,34 +24,43 @@ class App extends React.Component {
     }
   };
 
-  // TODO: refactor function to accept string arguments
-  go = (e, id = 0, data = {}) => {
-    const route = e.currentTarget.dataset.to;
-    this.setState({ activePanel: route, cardId: id, data: data });
-    this.setLocation(route);
+  go = (e = 'home', id = 0, data = {}) => {
+    let route = null;
+
+    if (typeof route === 'string') {
+      route = e;
+    } else if (e && e.currentTarget) {
+      route = e.currentTarget.dataset.to;
+    }
+
+    this.setState({ activePanel: route, cardId: id, data: data }, () => {
+      this.setLocation(route);
+    });
   };
 
-  setPopout(popout) {
+  setPopout = popout => {
     this.setState({
       popout: popout
     });
-  }
+  };
 
   render() {
+    const { activePanel, popout, fetchedUser, data, cardId } = this.state;
+
     return (
-      <View activePanel={this.state.activePanel} popout={this.state.popout}>
-        <Home id="home" user={this.state.fetchedUser} go={this.go} />
+      <View activePanel={activePanel} popout={popout}>
+        <Home id="home" user={fetchedUser} go={this.go} />
         <Page
           id="page"
-          cardCode={this.state.cardId}
-          data={this.state.data}
+          cardCode={cardId}
+          data={data}
           go={this.go}
           setPopout={this.setPopout}
         />
         <Task
           id="task"
-          cardId={this.state.cardId}
-          data={this.state.data}
+          cardId={cardId}
+          data={data}
           go={this.go}
           setPopout={this.setPopout}
         />
