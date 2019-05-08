@@ -111,7 +111,7 @@ const Area = ({
 
 Area.propTypes = {
   id: PropTypes.string.isRequired,
-  activeArea: PropTypes.string.isRequired,
+  activeArea: PropTypes.string,
   go: PropTypes.func.isRequired,
   setLocation: PropTypes.func.isRequired,
   setPopout: PropTypes.func.isRequired,
