@@ -17,14 +17,7 @@ import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 import { OS_NAME } from '../Constants';
 import { getData } from '../Modules';
 
-const Area = ({
-  id,
-  activeArea,
-  go,
-  setLocation,
-  setPopout,
-  setActiveTask
-}) => {
+const Area = ({ id, activeArea, setLocation, setPopout, setActiveTask }) => {
   // TODO: add set state functions
   const [tasks, setTasks] = useState({});
   // const [progress, setProgress] = useState(null);
@@ -38,6 +31,10 @@ const Area = ({
   // TODO: implement
   // const addProgress = () => {
   // };
+
+  const handleGoBack = () => {
+    setLocation('home');
+  };
 
   const openSheetRightAnswer = () => {
     setPopout(
@@ -65,7 +62,7 @@ const Area = ({
     <Panel id={id}>
       <PanelHeader
         left={
-          <HeaderButton onClick={go} data-to="home">
+          <HeaderButton onClick={handleGoBack}>
             {OS_NAME() === IOS ? <Icon24Cancel /> : <Icon24Cancel />}
           </HeaderButton>
         }>
@@ -112,7 +109,6 @@ const Area = ({
 Area.propTypes = {
   id: PropTypes.string.isRequired,
   activeArea: PropTypes.string,
-  go: PropTypes.func.isRequired,
   setLocation: PropTypes.func.isRequired,
   setPopout: PropTypes.func.isRequired,
   setActiveTask: PropTypes.func.isRequired
