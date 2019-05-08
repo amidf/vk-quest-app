@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Panel,
@@ -6,7 +6,6 @@ import {
   InfoRow,
   PanelHeader,
   HeaderButton,
-  platform,
   IOS,
   Div,
   Cell,
@@ -15,28 +14,21 @@ import {
 } from '@vkontakte/vkui';
 import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 
-import API_data from '../Modules/API_data';
+import { OS_NAME } from '../Constants';
+import { getData } from '../Modules';
 
-const osname = platform();
+const Page = ({ id, cardCode, go, setPopout }) => {
+  // TODO: add set state functions
+  const [data] = useState(getData());
+  const [code] = useState(cardCode);
+  // const [progress, setProgress] = useState(null);
 
-class Page extends React.Component {
-  constructor(props) {
-    super(props);
+  // TODO: implement
+  // const addProgress = () => {
+  // };
 
-    this.state = {
-      code: this.props.cardCode,
-      progress: null,
-      date: API_data(),
-      popout: null
-    };
-  }
-
-  add_progress() {
-    // return this.state.progress
-  }
-
-  openSheetRightAnswer() {
-    this.props.setPopout(
+  const openSheetRightAnswer = () => {
+    setPopout(
       <Alert
         actions={[
           {
@@ -45,22 +37,20 @@ class Page extends React.Component {
             style: 'destructive'
           }
         ]}
-        onClose={() => this.props.setPopout(null)}>
+        onClose={() => setPopout(null)}>
         <h2>Поздравляем!</h2>
         <p>Вы прошли все контрольные точки</p>
       </Alert>
     );
-  }
+  };
 
-  render() {
-    const props = this.props;
-
-    return (
-      <Panel id={props.id}>
+  return (
+    data && (
+      <Panel id={id}>
         <PanelHeader
           left={
-            <HeaderButton onClick={props.go} data-to="home">
-              {osname === IOS ? <Icon24Cancel /> : <Icon24Cancel />}
+            <HeaderButton onClick={go} data-to="home">
+              {OS_NAME() === IOS ? <Icon24Cancel /> : <Icon24Cancel />}
             </HeaderButton>
           }>
           Ориентирование
@@ -69,7 +59,7 @@ class Page extends React.Component {
         <Group>
           <Div>
             <InfoRow title="Количество Контрольных Пунктов">
-              {this.state.date[this.state.code].length}
+              {data[code] ? data[code].length : 0}
             </InfoRow>
           </Div>
         </Group>
@@ -79,29 +69,30 @@ class Page extends React.Component {
             После прохождения всех контрольных точек вы станете победителем.
             Удачи!
           </Div>
-          {this.state.date[this.state.code].map(i => {
-            return (
-              <Group key={i.name}>
-                <List>
-                  <Cell expandable onClick={e => props.go(e, i)} data-to="task">
-                    {i.name}
-                  </Cell>
-                </List>
-              </Group>
-            );
-          })}
+          {data[code] &&
+            data[code].map(i => {
+              return (
+                <Group key={i.name}>
+                  <List>
+                    <Cell expandable onClick={e => go(e, i)} data-to="task">
+                      {i.name}
+                    </Cell>
+                  </List>
+                </Group>
+              );
+            })}
           <Group>
             <List>
-              <Cell expandable onClick={this.openSheetRightAnswer.bind(this)}>
+              <Cell expandable onClick={openSheetRightAnswer}>
                 Точка
               </Cell>
             </List>
           </Group>
         </Group>
       </Panel>
-    );
-  }
-}
+    )
+  );
+};
 
 Page.propTypes = {
   id: PropTypes.string.isRequired,
