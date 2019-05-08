@@ -50,7 +50,7 @@ const App = () => {
     <View activePanel={activePanel} popout={popout}>
       <Home id="home" user={fetchedUser} go={go} />
       <Area
-        id="page"
+        id="area"
         cardCode={cardId}
         data={data}
         go={go}
