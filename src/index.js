@@ -8,8 +8,8 @@ import '@vkontakte/vkui/dist/vkui.css';
 import App from './App';
 import registerServiceWorker from './sw';
 
-import './stylesheets/Home.css';
-import './stylesheets/main.css';
+import './styles/Home.css';
+import './styles/index.css';
 
 // Init VK App
 connect.send('VKWebAppInit', {});
