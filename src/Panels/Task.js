@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   Panel,
@@ -24,19 +24,67 @@ import Icon24Info from '@vkontakte/icons/dist/24/info';
 
 import { OS_NAME } from '../Constants';
 
-const Task = ({ id, cardId, setPopout, go }) => {
+import { getData } from '../Modules';
+
+const Task = ({
+  id,
+  activeArea,
+  activeTask,
+  setLocation,
+  setPopout,
+  setActiveTask
+}) => {
   // TODO: add set state function
-  const [data] = useState(cardId);
+  const [tasks, setTasks] = useState([]);
+  const [currentTask, setCurrentTask] = useState({});
   const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    const updatedTasks = getData();
+
+    if (updatedTasks[activeArea]) {
+      const updatedCurrentTask =
+        updatedTasks[activeArea].find(({ id }) => id === activeTask) || {};
+
+      setTasks(updatedTasks[activeArea]);
+      setCurrentTask(updatedCurrentTask);
+    }
+  }, []);
+
+  const handleGoBack = () => {
+    setLocation('area');
+  };
 
   const handleChange = e => {
     setInputValue(e.target.value);
   };
 
+  const handleGoToNextTask = () => {
+    const updatedActiveTask =
+      currentTask.id + 1 <= tasks[tasks.length - 1].id
+        ? currentTask.id + 1
+        : null;
+
+    if (updatedActiveTask) {
+      const updatedCurrentTask =
+        tasks.find(({ id }) => id === updatedActiveTask) || {};
+
+      setActiveTask(updatedActiveTask);
+      setCurrentTask(updatedCurrentTask);
+      setToDefault();
+    } else {
+      setActiveTask(updatedActiveTask);
+      setLocation('area');
+      setToDefault();
+    }
+
+    setPopout(null);
+  };
+
   const submitFormValue = e => {
     e.preventDefault();
 
-    if (id['answer'] === inputValue) {
+    if (currentTask.answer.includes(inputValue)) {
       openSheetRightAnswer();
     } else {
       openSheetWrongAnswer();
@@ -55,7 +103,7 @@ const Task = ({ id, cardId, setPopout, go }) => {
         ]}
         onClose={() => setPopout(null)}>
         <h2>Подсказка</h2>
-        <p>{data.hint}</p>
+        <p>{currentTask.hint}</p>
       </Alert>
     );
   };
@@ -87,62 +135,68 @@ const Task = ({ id, cardId, setPopout, go }) => {
             style: 'destructive'
           }
         ]}
-        onClose={() => setPopout(null)}>
+        onClose={handleGoToNextTask}>
         <h2>Результат</h2>
         <p>Ответ Правильный</p>
       </Alert>
     );
   };
 
-  return (
-    data && (
-      <Panel id={id}>
-        <PanelHeader
-          left={
-            <HeaderButton onClick={e => go(e, data.code)} data-to="page">
-              {OS_NAME() === IOS ? <Icon28ChevronBack /> : <Icon24Back />}
-            </HeaderButton>
-          }>
-          {data.name}
-        </PanelHeader>
-        <Group>
-          <Div>
-            <List>
-              <Cell before={<Icon24Info />}>{data.target}</Cell>
-              <Cell before={<Icon24Place />}>{data.adress}</Cell>
-              {data.task}
-            </List>
-          </Div>
-          <FormLayout>
-            <FormLayoutGroup top="Введите ответ">
-              <Input
-                type="text"
-                alignment="center"
-                value={inputValue}
-                onChange={handleChange}
-              />
-            </FormLayoutGroup>
-          </FormLayout>
+  const setToDefault = () => {
+    setInputValue('');
+  };
 
-          <ListItem>
-            <Button size="l" stretched onClick={submitFormValue} data-to="page">
-              Проверить
-            </Button>
-          </ListItem>
-          {data.hint ? (
-            <CellButton onClick={openSheet}>Подсказка</CellButton>
-          ) : (
-            <CellButton disabled>Подсказка</CellButton>
-          )}
-        </Group>
-      </Panel>
-    )
+  return (
+    <Panel id={id}>
+      <PanelHeader
+        left={
+          <HeaderButton onClick={handleGoBack}>
+            {OS_NAME() === IOS ? <Icon28ChevronBack /> : <Icon24Back />}
+          </HeaderButton>
+        }>
+        {currentTask.name}
+      </PanelHeader>
+      <Group>
+        <Div>
+          <List>
+            <Cell before={<Icon24Info />}>{currentTask.target}</Cell>
+            <Cell before={<Icon24Place />}>{currentTask.adress}</Cell>
+            {currentTask.task}
+          </List>
+        </Div>
+        <FormLayout>
+          <FormLayoutGroup top="Введите ответ">
+            <Input
+              type="text"
+              alignment="center"
+              value={inputValue}
+              onChange={handleChange}
+            />
+          </FormLayoutGroup>
+        </FormLayout>
+
+        <ListItem>
+          <Button size="l" stretched onClick={submitFormValue}>
+            Проверить
+          </Button>
+        </ListItem>
+        {currentTask.hint ? (
+          <CellButton onClick={openSheet}>Подсказка</CellButton>
+        ) : (
+          <CellButton disabled>Подсказка</CellButton>
+        )}
+      </Group>
+    </Panel>
   );
 };
 
 Task.propTypes = {
   id: PropTypes.string.isRequired,
-  go: PropTypes.func.isRequired
+  activeArea: PropTypes.string,
+  activeTask: PropTypes.number,
+  setLocation: PropTypes.func.isRequired,
+  setPopout: PropTypes.func.isRequired,
+  setActiveTask: PropTypes.func.isRequired
 };
 
 export default Task;
