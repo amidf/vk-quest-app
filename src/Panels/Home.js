@@ -13,7 +13,7 @@ const Home = ({ id, setLocation, setActiveArea }) => {
     setAreas(updatedAreas);
   }, []);
 
-  const handleClick = (e, code) => {
+  const handleClick = code => {
     setActiveArea(code);
     setLocation('area');
   };
@@ -28,7 +28,7 @@ const Home = ({ id, setLocation, setActiveArea }) => {
               <Link
                 size="m"
                 level="tertiary"
-                onClick={e => handleClick(e, code)}
+                onClick={() => handleClick(code)}
                 data-to="page">
                 Принять участие
               </Link>
