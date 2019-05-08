@@ -17,7 +17,7 @@ import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 import { OS_NAME } from '../Constants';
 import { getData } from '../Modules';
 
-const Page = ({ id, cardCode, go, setPopout }) => {
+const Area = ({ id, cardCode, go, setPopout }) => {
   // TODO: add set state functions
   const [data] = useState(getData());
   const [code] = useState(cardCode);
@@ -94,9 +94,9 @@ const Page = ({ id, cardCode, go, setPopout }) => {
   );
 };
 
-Page.propTypes = {
+Area.propTypes = {
   id: PropTypes.string.isRequired,
   go: PropTypes.func.isRequired
 };
 
-export default Page;
+export default Area;

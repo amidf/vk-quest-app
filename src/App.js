@@ -5,7 +5,7 @@ import { View } from '@vkontakte/vkui';
 import { ROUTES } from './config';
 
 import Home from './Panels/Home';
-import Page from './Panels/Page';
+import Area from './Panels/Area';
 import Task from './Panels/Task';
 
 const location = window.location.hash.substr(1);
@@ -49,7 +49,7 @@ const App = () => {
   return (
     <View activePanel={activePanel} popout={popout}>
       <Home id="home" user={fetchedUser} go={go} />
-      <Page
+      <Area
         id="page"
         cardCode={cardId}
         data={data}
