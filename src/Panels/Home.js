@@ -2,19 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Panel, Group, ListItem, PanelHeader, Link } from '@vkontakte/vkui';
 
-import area_code from '../Modules/area_code';
+import { getAreas } from '../Modules';
 
-const Home = props => (
-  <Panel id={props.id}>
+const Home = ({ id, go }) => (
+  <Panel id={id}>
     <PanelHeader>Ориентирование</PanelHeader>
-    {area_code().map(i => {
+    {getAreas().map(({ name, code }) => {
       return (
-        <Group key={i.name} title={i.name}>
+        <Group key={name} title={name}>
           <ListItem>
             <Link
               size="m"
               level="tertiary"
-              onClick={e => props.go(e, i.code)}
+              onClick={e => go(e, code)}
               data-to="page">
               Принять участие
             </Link>
