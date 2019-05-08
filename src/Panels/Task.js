@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Panel,
@@ -8,7 +8,6 @@ import {
   ListItem,
   PanelHeader,
   HeaderButton,
-  platform,
   IOS,
   Cell,
   List,
@@ -23,41 +22,29 @@ import Icon24Back from '@vkontakte/icons/dist/24/back';
 import Icon24Place from '@vkontakte/icons/dist/24/place';
 import Icon24Info from '@vkontakte/icons/dist/24/info';
 
-const osname = platform();
+import { OS_NAME } from '../Constants';
 
-class Task extends React.Component {
-  constructor(props) {
-    super(props);
+const Task = ({ id, cardId, setPopout, go }) => {
+  // TODO: add set state function
+  const [data] = useState(cardId);
+  const [inputValue, setInputValue] = useState('');
 
-    this.state = {
-      id: this.props.cardId,
-      code: this.props.cardCode,
-      date: this.props.cardId,
-      popout: null
-    };
+  const handleChange = e => {
+    setInputValue(e.target.value);
+  };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.submitFormValue = this.submitFormValue.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  submitFormValue(e) {
+  const submitFormValue = e => {
     e.preventDefault();
 
-    if (this.state.id['answer'] === this.state.value) {
-      console.log('Правильный ответ');
-      this.openSheetRightAnswer();
+    if (id['answer'] === inputValue) {
+      openSheetRightAnswer();
     } else {
-      console.log('Неправильный ответ');
-      this.openSheetWrongAnswer();
+      openSheetWrongAnswer();
     }
-  }
+  };
 
-  openSheet() {
-    this.props.setPopout(
+  const openSheet = () => {
+    setPopout(
       <Alert
         actions={[
           {
@@ -66,15 +53,15 @@ class Task extends React.Component {
             style: 'destructive'
           }
         ]}
-        onClose={() => this.props.setPopout(null)}>
+        onClose={() => setPopout(null)}>
         <h2>Подсказка</h2>
-        <p>{this.state.date.hint}</p>
+        <p>{data.hint}</p>
       </Alert>
     );
-  }
+  };
 
-  openSheetWrongAnswer() {
-    this.props.setPopout(
+  const openSheetWrongAnswer = () => {
+    setPopout(
       <Alert
         actions={[
           {
@@ -83,15 +70,15 @@ class Task extends React.Component {
             style: 'destructive'
           }
         ]}
-        onClose={() => this.props.setPopout(null)}>
+        onClose={() => setPopout(null)}>
         <h2>Результат</h2>
         <p>Ответ отрицательный</p>
       </Alert>
     );
-  }
+  };
 
-  openSheetRightAnswer() {
-    this.props.setPopout(
+  const openSheetRightAnswer = () => {
+    setPopout(
       <Alert
         actions={[
           {
@@ -100,22 +87,20 @@ class Task extends React.Component {
             style: 'destructive'
           }
         ]}
-        onClose={() => this.props.setPopout(null)}>
+        onClose={() => setPopout(null)}>
         <h2>Результат</h2>
         <p>Ответ Правильный</p>
       </Alert>
     );
-  }
+  };
 
-  render() {
-    const props = this.props;
-    const data = props.cardId;
-    return (
-      <Panel id={props.id}>
+  return (
+    data && (
+      <Panel id={id}>
         <PanelHeader
           left={
-            <HeaderButton onClick={e => props.go(e, data.code)} data-to="page">
-              {osname === IOS ? <Icon28ChevronBack /> : <Icon24Back />}
+            <HeaderButton onClick={e => go(e, data.code)} data-to="page">
+              {OS_NAME() === IOS ? <Icon28ChevronBack /> : <Icon24Back />}
             </HeaderButton>
           }>
           {data.name}
@@ -133,33 +118,27 @@ class Task extends React.Component {
               <Input
                 type="text"
                 alignment="center"
-                value={this.state.value}
-                onChange={this.handleChange}
+                value={inputValue}
+                onChange={handleChange}
               />
             </FormLayoutGroup>
           </FormLayout>
 
           <ListItem>
-            <Button
-              size="l"
-              stretched
-              onClick={this.submitFormValue}
-              data-to="page">
+            <Button size="l" stretched onClick={submitFormValue} data-to="page">
               Проверить
             </Button>
           </ListItem>
-          {this.state.date.hint ? (
-            <CellButton onClick={this.openSheet.bind(this)}>
-              Подсказка
-            </CellButton>
+          {data.hint ? (
+            <CellButton onClick={openSheet}>Подсказка</CellButton>
           ) : (
             <CellButton disabled>Подсказка</CellButton>
           )}
         </Group>
       </Panel>
-    );
-  }
-}
+    )
+  );
+};
 
 Task.propTypes = {
   id: PropTypes.string.isRequired,

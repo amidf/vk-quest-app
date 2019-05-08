@@ -1,8 +1,8 @@
 :root {
-	/* fonts */
-	--font-ios: -apple-system, Helvetica Neue, Arial;
-	--font-android: Roboto, Arial;
-	--font-common: -apple-system, Roboto, Helvetica Neue, Arial;
+  /* fonts */
+  --font-ios: -apple-system, Helvetica Neue, Arial;
+  --font-android: Roboto, Arial;
+  --font-common: -apple-system, Roboto, Helvetica Neue, Arial;
 }
 
 html,
