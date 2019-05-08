@@ -4,7 +4,7 @@ import { Panel, Group, ListItem, PanelHeader, Link } from '@vkontakte/vkui';
 
 import { getAreas } from '../Modules';
 
-const Home = ({ id, go }) => {
+const Home = ({ id, setLocation, setActiveArea }) => {
   const [areas, setAreas] = useState([]);
 
   useEffect(() => {
@@ -12,6 +12,11 @@ const Home = ({ id, go }) => {
 
     setAreas(updatedAreas);
   }, []);
+
+  const handleClick = (e, code) => {
+    setActiveArea(code);
+    setLocation('area');
+  };
 
   return (
     <Panel id={id}>
@@ -23,7 +28,7 @@ const Home = ({ id, go }) => {
               <Link
                 size="m"
                 level="tertiary"
-                onClick={e => go(e, code)}
+                onClick={e => handleClick(e, code)}
                 data-to="page">
                 Принять участие
               </Link>
@@ -37,7 +42,8 @@ const Home = ({ id, go }) => {
 
 Home.propTypes = {
   id: PropTypes.string.isRequired,
-  go: PropTypes.func.isRequired
+  setLocation: PropTypes.func.isRequired,
+  setActiveArea: PropTypes.func.isRequired
 };
 
 export default Home;

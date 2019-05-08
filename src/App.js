@@ -14,6 +14,7 @@ const App = () => {
   const [activePanel, setActivePanel] = useState(
     ~ROUTES.indexOf(location) ? location : 'home'
   );
+  const [activeArea, setActiveArea] = useState(null);
   const [popout, setPopout] = useState(null);
   const [cardId, setCardId] = useState(0);
   const [data, setData] = useState({});
@@ -26,6 +27,8 @@ const App = () => {
     } else {
       connect.send('VKWebAppSetLocation', { location: '' });
     }
+
+    setActivePanel(route);
   };
 
   const go = (e, id = 0, data = {}) => {
@@ -48,9 +51,15 @@ const App = () => {
 
   return (
     <View activePanel={activePanel} popout={popout}>
-      <Home id="home" user={fetchedUser} go={go} />
+      <Home
+        id="home"
+        user={fetchedUser}
+        setLocation={setLocation}
+        setActiveArea={setActiveArea}
+      />
       <Area
         id="area"
+        activeArea={activeArea}
         cardCode={cardId}
         data={data}
         go={go}
