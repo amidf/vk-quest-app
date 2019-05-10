@@ -17,10 +17,8 @@ import Icon24Cancel from '@vkontakte/icons/dist/24/cancel';
 import { OS_NAME } from '../Constants';
 import { getData } from '../Modules';
 
-const Area = ({ id, activeArea, setLocation, setPopout, setActiveTask }) => {
-  // TODO: add set state functions
+const Area = ({ id, activeArea, setActivePanel, setPopout, setActiveTask }) => {
   const [tasks, setTasks] = useState({});
-  // const [progress, setProgress] = useState(null);
 
   useEffect(() => {
     const updatedTasks = getData();
@@ -28,12 +26,8 @@ const Area = ({ id, activeArea, setLocation, setPopout, setActiveTask }) => {
     setTasks(updatedTasks);
   }, []);
 
-  // TODO: implement
-  // const addProgress = () => {
-  // };
-
   const handleGoBack = () => {
-    setLocation('home');
+    setActivePanel('home');
   };
 
   const openSheetRightAnswer = () => {
@@ -55,7 +49,7 @@ const Area = ({ id, activeArea, setLocation, setPopout, setActiveTask }) => {
 
   const handleClick = taskId => {
     setActiveTask(taskId);
-    setLocation('task');
+    setActivePanel('task');
   };
 
   return (
@@ -109,7 +103,7 @@ const Area = ({ id, activeArea, setLocation, setPopout, setActiveTask }) => {
 Area.propTypes = {
   id: PropTypes.string.isRequired,
   activeArea: PropTypes.string,
-  setLocation: PropTypes.func.isRequired,
+  setActivePanel: PropTypes.func.isRequired,
   setPopout: PropTypes.func.isRequired,
   setActiveTask: PropTypes.func.isRequired
 };

@@ -4,7 +4,7 @@ import { Panel, Group, ListItem, PanelHeader, Link } from '@vkontakte/vkui';
 
 import { getAreas } from '../Modules';
 
-const Home = ({ id, setLocation, setActiveArea }) => {
+const Home = ({ id, setActivePanel, setActiveArea }) => {
   const [areas, setAreas] = useState([]);
 
   useEffect(() => {
@@ -15,13 +15,15 @@ const Home = ({ id, setLocation, setActiveArea }) => {
 
   const handleClick = code => {
     setActiveArea(code);
-    setLocation('area');
+    setActivePanel('area');
   };
 
   return (
     <Panel id={id}>
       <PanelHeader>Ориентирование</PanelHeader>
-      {areas.map(({ name, code }) => {
+      {areas.map(area => {
+        const { name, code } = area;
+
         return (
           <Group key={name} title={name}>
             <ListItem>
@@ -42,7 +44,7 @@ const Home = ({ id, setLocation, setActiveArea }) => {
 
 Home.propTypes = {
   id: PropTypes.string.isRequired,
-  setLocation: PropTypes.func.isRequired,
+  setActivePanel: PropTypes.func.isRequired,
   setActiveArea: PropTypes.func.isRequired
 };
 

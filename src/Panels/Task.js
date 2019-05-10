@@ -34,7 +34,6 @@ const Task = ({
   setPopout,
   setActiveTask
 }) => {
-  // TODO: add set state function
   const [tasks, setTasks] = useState([]);
   const [currentTask, setCurrentTask] = useState({});
   const [inputValue, setInputValue] = useState('');
@@ -71,11 +70,11 @@ const Task = ({
 
       setActiveTask(updatedActiveTask);
       setCurrentTask(updatedCurrentTask);
-      setToDefault();
+      setInputValue('');
     } else {
       setActiveTask(updatedActiveTask);
-      setLocation('area');
-      setToDefault();
+      setActivePanel('area');
+      setInputValue('');
     }
 
     setPopout(null);
@@ -142,10 +141,6 @@ const Task = ({
     );
   };
 
-  const setToDefault = () => {
-    setInputValue('');
-  };
-
   return (
     <Panel id={id}>
       <PanelHeader
@@ -194,7 +189,7 @@ Task.propTypes = {
   id: PropTypes.string.isRequired,
   activeArea: PropTypes.string,
   activeTask: PropTypes.number,
-  setLocation: PropTypes.func.isRequired,
+  setActivePanel: PropTypes.func.isRequired,
   setPopout: PropTypes.func.isRequired,
   setActiveTask: PropTypes.func.isRequired
 };
