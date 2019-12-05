@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   Panel,
   Alert,
@@ -16,15 +16,15 @@ import {
   Input,
   FormLayout,
   FormLayoutGroup
-} from '@vkontakte/vkui';
-import Icon28ChevronBack from '@vkontakte/icons/dist/28/chevron_back';
-import Icon24Back from '@vkontakte/icons/dist/24/back';
-import Icon24Place from '@vkontakte/icons/dist/24/place';
-import Icon24Info from '@vkontakte/icons/dist/24/info';
+} from "@vkontakte/vkui";
+import Icon28ChevronBack from "@vkontakte/icons/dist/28/chevron_back";
+import Icon24Back from "@vkontakte/icons/dist/24/back";
+import Icon24Place from "@vkontakte/icons/dist/24/place";
+import Icon24Info from "@vkontakte/icons/dist/24/info";
 
-import { OS_NAME } from '../Constants';
+import { OS_NAME } from "../Constants";
 
-import { getData } from '../Modules';
+import { getData } from "../Modules";
 
 const Task = ({
   id,
@@ -36,7 +36,7 @@ const Task = ({
 }) => {
   const [tasks, setTasks] = useState([]);
   const [currentTask, setCurrentTask] = useState({});
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     const updatedTasks = getData();
@@ -48,10 +48,10 @@ const Task = ({
       setTasks(updatedTasks[activeArea]);
       setCurrentTask(updatedCurrentTask);
     }
-  }, []);
+  }, [activeArea, activeTask]);
 
   const handleGoBack = () => {
-    setLocation('area');
+    setLocation("area");
   };
 
   const handleChange = e => {
@@ -70,11 +70,11 @@ const Task = ({
 
       setActiveTask(updatedActiveTask);
       setCurrentTask(updatedCurrentTask);
-      setInputValue('');
+      setInputValue("");
     } else {
       setActiveTask(updatedActiveTask);
-      setActivePanel('area');
-      setInputValue('');
+      setActivePanel("area");
+      setInputValue("");
     }
 
     setPopout(null);
@@ -95,12 +95,13 @@ const Task = ({
       <Alert
         actions={[
           {
-            title: 'Close',
+            title: "Close",
             autoclose: true,
-            style: 'destructive'
+            style: "destructive"
           }
         ]}
-        onClose={() => setPopout(null)}>
+        onClose={() => setPopout(null)}
+      >
         <h2>Подсказка</h2>
         <p>{currentTask.hint}</p>
       </Alert>
@@ -112,12 +113,13 @@ const Task = ({
       <Alert
         actions={[
           {
-            title: 'Close',
+            title: "Close",
             autoclose: true,
-            style: 'destructive'
+            style: "destructive"
           }
         ]}
-        onClose={() => setPopout(null)}>
+        onClose={() => setPopout(null)}
+      >
         <h2>Результат</h2>
         <p>Ответ отрицательный</p>
       </Alert>
@@ -129,12 +131,13 @@ const Task = ({
       <Alert
         actions={[
           {
-            title: 'Close',
+            title: "Close",
             autoclose: true,
-            style: 'destructive'
+            style: "destructive"
           }
         ]}
-        onClose={handleGoToNextTask}>
+        onClose={handleGoToNextTask}
+      >
         <h2>Результат</h2>
         <p>Ответ Правильный</p>
       </Alert>
@@ -148,7 +151,8 @@ const Task = ({
           <HeaderButton onClick={handleGoBack}>
             {OS_NAME() === IOS ? <Icon28ChevronBack /> : <Icon24Back />}
           </HeaderButton>
-        }>
+        }
+      >
         {currentTask.name}
       </PanelHeader>
       <Group>
